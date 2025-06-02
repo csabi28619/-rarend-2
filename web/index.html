@@ -3,15 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Órarend és Feladatkezelő alkalmazás</title>
+    <title>Órarend</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <select>
-            <option value="">alma</option>
-            <option value="">alma</option>
-        </select>
+        <h1>Órarend</h1>
+        <div id="loading">Órarend betöltése...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="timetable-container" style="display: none;">
+            <table id="timetable">
+                <thead>
+                    <tr>
+                        <th>Időpont</th>
+                        <th>Hétfő</th>
+                        <th>Kedd</th>
+                        <th>Szerda</th>
+                        <th>Csütörtök</th>
+                        <th>Péntek</th>
+                    </tr>
+                </thead>
+                <tbody id="timetable-body">
+                </tbody>
+            </table>
+        </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
