@@ -3,31 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Órarend</title>
+    <title>Órarend és Teendők Kezelő</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Órarend</h1>
-        <div id="loading">Órarend betöltése...</div>
-        <div id="error" class="error" style="display: none;"></div>
-        <div id="timetable-container" style="display: none;">
-            <table id="timetable">
-                <thead>
-                    <tr>
-                        <th>Időpont</th>
-                        <th>Hétfő</th>
-                        <th>Kedd</th>
-                        <th>Szerda</th>
-                        <th>Csütörtök</th>
-                        <th>Péntek</th>
-                    </tr>
-                </thead>
-                <tbody id="timetable-body">
-                </tbody>
-            </table>
+        <header>
+            <h1>📚 Órarend és Teendők Kezelő</h1>
+            <nav class="nav-tabs">
+                <button class="tab-btn active" onclick="showTab('timetable')">📅 Órarend</button>
+                <button class="tab-btn" onclick="showTab('tasks')">✅ Teendők</button>
+            </nav>
+        </header>
+
+        <div id="timetable-tab" class="tab-content active">
+            <div class="section-header">
+                <h2>Órarend</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="showAddTimetableForm()">➕ Új óra hozzáadása</button>
+                    <button class="btn btn-secondary" onclick="exportTimetable()">💾 Exportálás</button>
+                    <input type="file" id="import-timetable" accept=".txt,.csv" onchange="importTimetable()" style="display: none;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('import-timetable').click()">📂 Importálás</button>
+                </div>
+            </div>
+            
+            <div id="timetable-container">
+                <table id="timetable">
+                    <thead>
+                        <tr>
+                            <th>Időpont</th>
+                            <th>Hétfő</th>
+                            <th>Kedd</th>
+                            <th>Szerda</th>
+                            <th>Csütörtök</th>
+                            <th>Péntek</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tasks-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Teendők</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="showAddTaskForm()">➕ Új teendő hozzáadása</button>
+                    <button class="btn btn-secondary" onclick="exportTasks()">💾 Exportálás</button>
+                    <input type="file" id="import-tasks" accept=".txt,.csv" onchange="importTasks()" style="display: none;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('import-tasks').click()">📂 Importálás</button>
+                </div>
+            </div>
+
+            <div class="search-filters">
+                <div class="search-row">
+                    <input type="text" id="search-input" placeholder="🔍 Keresés..." onkeyup="filterTasks()">
+                    <select id="filter-type" onchange="filterTasks()">
+                        <option value="">Minden típus</option>
+                        <option value="házi feladat">📝 Házi feladat</option>
+                        <option value="dolgozat">📋 Dolgozat</option>
+                        <option value="egyéb">📌 Egyéb</option>
+                    </select>
+                    <select id="filter-status" onchange="filterTasks()">
+                        <option value="">Minden státusz</option>
+                        <option value="kész">✅ Kész</option>
+                        <option value="nem kész">⏳ Nem kész</option>
+                    </select>
+                    <select id="filter-subject" onchange="filterTasks()">
+                        <option value="">Minden tantárgy</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="tasks-container">
+                <div id="tasks-list"></div>
+            </div>
+        </div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="modal-body"></div>
+            </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
