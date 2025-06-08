@@ -264,7 +264,6 @@ function renderTasks() {
                         <button class="action-btn" onclick="deleteTask(${task.id})">🗑️</button>
                     </div>
                 </div>
-                <div class="task-title">${task.leírás}</div>
                 <div class="task-details">
                     <div class="task-detail">
                         <span>📚</span>
@@ -275,8 +274,8 @@ function renderTasks() {
                         <span>${formatDate(task.határidő)}</span>
                     </div>
                     <div class="task-detail">
-                        <button class="status-toggle ${task.státusz === 'kész' ? 'completed' : ''}" 
-                                onclick="toggleTaskStatus(${task.id})">
+                        <button class="status-toggle ${task.státusz === 'kész' ? 'completed' : ''}"
+                                 onclick="toggleTaskStatus(${task.id})">
                             ${task.státusz === 'kész' ? '✅ Kész' : '⏳ Nem kész'}
                         </button>
                     </div>
@@ -307,8 +306,7 @@ function getFilteredTasks() {
     const subjectFilter = document.getElementById('filter-subject').value;
     
     return tasksData.filter(task => {
-        const matchesSearch = task.leírás.toLowerCase().includes(searchTerm) ||
-                            task.tantárgy.toLowerCase().includes(searchTerm);
+        const matchesSearch = task.tantárgy.toLowerCase().includes(searchTerm);
         const matchesType = !typeFilter || task.típus === typeFilter;
         const matchesStatus = !statusFilter || task.státusz === statusFilter;
         const matchesSubject = !subjectFilter || task.tantárgy === subjectFilter;
@@ -335,10 +333,6 @@ function showAddTaskForm() {
                     <option value="dolgozat">📋 Dolgozat</option>
                     <option value="egyéb">📌 Egyéb</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="task-description">Leírás:</label>
-                <textarea id="task-description" placeholder="Teendő leírása..." required></textarea>
             </div>
             <div class="form-group">
                 <label for="task-subject">Tantárgy:</label>
@@ -387,10 +381,6 @@ function editTask(taskId) {
                 </select>
             </div>
             <div class="form-group">
-                <label for="task-description">Leírás:</label>
-                <textarea id="task-description" required>${task.leírás}</textarea>
-            </div>
-            <div class="form-group">
                 <label for="task-subject">Tantárgy:</label>
                 <input type="text" id="task-subject" value="${task.tantárgy}" required>
             </div>
@@ -422,14 +412,12 @@ function editTask(taskId) {
 
 function saveTask() {
     const type = document.getElementById('task-type').value;
-    const description = document.getElementById('task-description').value;
     const subject = document.getElementById('task-subject').value;
     const deadline = document.getElementById('task-deadline').value;
     const status = document.getElementById('task-status').value;
     
     const taskData = {
         típus: type,
-        leírás: description,
         tantárgy: subject,
         határidő: deadline,
         státusz: status
@@ -505,7 +493,7 @@ function exportTimetable() {
 function exportTasks() {
     let csvContent = '';
     tasksData.forEach(task => {
-        csvContent += `${task.típus};${task.leírás};${task.tantárgy};${task.határidő};${task.státusz}\n`;
+        csvContent += `${task.típus};${task.tantárgy};${task.határidő};${task.státusz}\n`;
     });
     
     downloadFile('teendok.txt', csvContent);
@@ -562,12 +550,11 @@ function importTasks() {
         
         tasksData = [];
         lines.forEach((line, index) => {
-            const [type, description, subject, deadline, status] = line.split(';');
-            if (type && description && subject && deadline && status) {
+            const [type, subject, deadline, status] = line.split(';');
+            if (type && subject && deadline && status) {
                 tasksData.push({
                     id: index + 1,
                     típus: type,
-                    leírás: description,
                     tantárgy: subject,
                     határidő: deadline,
                     státusz: status
